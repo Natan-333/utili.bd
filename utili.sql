@@ -112,14 +112,14 @@ select round(avg(salario_fixo),2)from vededor;
 
 --2)
 select * from cleinte;
-select count(cep) from cliente where cidade = 'S„o Paulo';
+select count(cep) from cliente where cidade = 'S√£o Paulo';
 
 --3)
 select count(num_pedido) "total de pedidos from pedido"
 where cod_clie =720;
 
 --4)
-select avg(salariofixo) 'custo salarials dos vendedores de comiss„o a'
+select avg(salariofixo) 'custo salarials dos vendedores de comiss√£o a'
 from
 
 --5)
@@ -128,15 +128,15 @@ select num(salario_fixo) from vendedor where comissao = 'c';
 select * from vendedor;
 select MAX (salario_fixo) from vendedor;
 
-soluÁ„o em duas partes
-1 - seleÁ„o que eibe a saida de dados
+solu√ß√£o em duas partes
+1 - sele√ß√£o que eibe a saida de dados
 select nome_ven, salario_fixo from vendedor;
-2 - filtro de exibiÁ„o
+2 - filtro de exibi√ß√£o
 select max(salario_fixo) from vendedor;
-3 - junstar as instruÁıes
+3 - junstar as instru√ß√µes
 select nome_ven, salario_fixo from vendedor
 where salario_fixo in (select max(salario_fixo) from vendedor);
-funıes de grupo - analisam linhas e retornam um resuultado apenas
+fun√µes de grupo - analisam linhas e retornam um resuultado apenas
 
 --7)
 select uf, count(cod_clie) from cliente group by uf order by 1;
@@ -149,14 +149,104 @@ select * from pedido where cod_clie = 260;
 select (num_pedido), count(cod_prod) from item_pedido group by num_pedido order by 1;
 
 quais cleintes possuem mais de 1 pedido?
-condiÁ„o usada na funÁ„o count
-having condiÁ„o
+condi√ß√£o usada na fun√ß√£o count
+having condi√ß√£o
 select cod_clie, count(num_pedido)from pedido
 
 --5.2)
-1 - seleÁ„o que exibe a saida de dados
-2 - filtro de exibiÁ„o
-3 - junstar as instruÁıes
+1 - sele√ß√£o que exibe a saida de dados
+2 - filtro de exibi√ß√£o
+3 - junstar as instru√ß√µes
 
 select nome_ven, salario_fixo from vendedor
 where salario_fixo > (select avg(salario_fixo) from vendedor);
+
+Fun√ß√µes data
+
+data dio sistema - sysdate
+
+Exibindo a data do sistema - vendo o padr√£o atual
+select sysdate from dual;
+
+select * from vendedor;
+
+alter table vendedor add dt_adm date default sysdate;
+alter table vendedor add dt_dem date default sysdate;
+
+select * from vendedor;
+
+processamneto com datas
+
+Data + n√∫mero = data
+Data - n√∫emro = data
+
+data - data = n√∫mero
+
+select sysdate, sysdate + 400, sysdate - 400 from dual;
+
+Subtrair 3580 dias data de admiss√£o dos vendedores de comiss√£o A
+
+update vendedor set dt_adm = dt_adm - 3580 where comissao = 'A';
+
+Subtrair 6580 dias data de admiss√£o dos vendedores de comiss√£o B
+
+update vendedor set dt_adm = dt_adm - 6580 where comissao = 'B';
+
+Subtrair 13580 dias data de admiss√£o dos vendedores de comiss√£o C
+
+update vendedor set dt_adm = dt_adm - 13580 where comissao = 'C';
+
+-- subtrair 18 dias da data de demiss√£o do vendedor Felipe--
+
+update vendedor set dt_adm = dt_adm - 18 where nome_ven = 'Felipe';
+
+--Apagar conteudo da coluna data de demiss√£o dos vendedores do c√≥digo: 101 a 310--
+
+update vendedor set dt_adm = dt_adm where cod_ven between 101 and 310;
+
+--subtrair 67 dias da data de demiss√£o do vendedor Joao de c√≥digo 11--
+
+update vendedor set dt_dem = dt_dem -67 where nome_ven = 'Jo√£o' and cod_ven= 11;
+
+desc cargo
+create table cargo(cd_cargo number (2) primary key,
+                   nm_cargo varchar(30),
+                   salario number(8,2)
+);
+creat table funcionario2(
+cd_cargo number(2)constraint funcionario_cd__cargo nn not null;
+
+
+
+insert into funcionario2 values  (10,'Marcel',1);
+insert into funcionario2 values  (11,'Claudio',2);
+insert into funcionario2 values  (12,'Amanda',2);
+insert into funcionario2 values  (13,'Samantha',not null);
+
+
+--criar um relatorio...-
+
+select nm_fun, nm_cargo from cargo inner join funcionario on cd_cargo = cargofk;
+
+--jun√ß√£o por...--
+left join ou right join
+
+--exiba os cargos...--
+select nm_fun, nm_cargo from cargo right join funcionario on cd_cargo = cargo_fk;
+
+select nm_fun,nm_cargo from cargo left join funcionairo on cd_cargo = cargo_fk
+wehre cargo_fk is null;
+
+--exiba o nome do cliente...--
+
+select nome_clie, nume_pedido from cliente inner join pedido on cliente.cod_clie -= pedido.cod_cliet; 
+
+--exiba o nome do vendedor...--
+
+select nome_ven,num_pedido from vendedor inner join pedido om pedido.cod_ven = vendedor.cod_ven;
+
+--eiba o nome...---
+
+select nome_ven,num_pedido nome_clie from pedido
+inner join vendedor on pedido.cod_ven = vendedor.cod_ven
+inner join cldiente on pedido.cod_clie = clie.cod_clie
